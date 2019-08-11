@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountDetails.cs" />
     <Compile Include="Backend\Discord\Actions.cs" />
     <Compile Include="Backend\Discord\Fetch.cs" />
     <Compile Include="Backend\Discord\NetworkInterface.cs" />

@@ -47,8 +47,9 @@ namespace DiscordWalker.Backend
                 }
             }
             if (ValidCodes.Count == 0) { Console.WriteLine("No Valid Codes"); }
-            Console.WriteLine("\nWaiting "+JoinDelay+" Seconds before Continuing\n");
-            Thread.Sleep((JoinDelay+Master.Rnd.Next(-10,10)) * 1000);
+            int Delay = (JoinDelay + Master.Rnd.Next(-10, 10));
+            Console.WriteLine("\nWaiting "+Delay+" Seconds before Continuing\n");
+            Thread.Sleep(Delay * 1000);
             return ValidCodes;
         }
 
