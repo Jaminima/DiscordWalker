@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordWalker", "DiscordWalker\DiscordWalker.csproj", "{64CCF4C2-ED36-49CE-8DAB-AEAA88CB1E4B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64CCF4C2-ED36-49CE-8DAB-AEAA88CB1E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64CCF4C2-ED36-49CE-8DAB-AEAA88CB1E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64CCF4C2-ED36-49CE-8DAB-AEAA88CB1E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64CCF4C2-ED36-49CE-8DAB-AEAA88CB1E4B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FF882D5-2428-474B-9C94-F4950F56DED2}
+	EndGlobalSection
+EndGlobal
