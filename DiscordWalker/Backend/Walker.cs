@@ -25,7 +25,7 @@ namespace DiscordWalker.Backend
                 }
                 UnWalkedCodes.RemoveAt(0);
             }
-            return WalkedCodes;
+            return WalkedCodes.Union(UnWalkedCodes).ToList();
         }
 
         static List<String> WalkDiscord(string InviteCode, int JoinDelay, ref List<String> WalkedGuilds)
@@ -48,7 +48,7 @@ namespace DiscordWalker.Backend
             }
             if (ValidCodes.Count == 0) { Console.WriteLine("No Valid Codes"); }
             Console.WriteLine("\nWaiting "+JoinDelay+" Seconds before Continuing\n");
-            Thread.Sleep(JoinDelay * 1000);
+            Thread.Sleep((JoinDelay+Master.Rnd.Next(-10,10)) * 1000);
             return ValidCodes;
         }
 
