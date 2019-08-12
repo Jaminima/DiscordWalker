@@ -28,7 +28,7 @@ namespace DiscordWalker.Backend.Discord
         {
             Method = Method.ToUpper();
             byte[] ReqData = Encoding.ASCII.GetBytes(Data);
-            WebRequest Req = WebRequest.Create("https://discordapp.com/api/v6/" + URL);
+            HttpWebRequest Req = (HttpWebRequest)WebRequest.Create("https://discordapp.com/api/v6/" + URL);
             Req.Method = Method; Req.ContentType = "application/json";
             if (WToken) { Req.Headers.Add("authorization", Token); }
             if (Method == "POST")
@@ -47,6 +47,13 @@ namespace DiscordWalker.Backend.Discord
             }
             catch (WebException e)
             {
+                if (((HttpWebResponse)e.Response).StatusCode.ToString() == "429")
+                {
+                    Console.WriteLine(e.Message);
+                    DateTime DT = DateTime.Parse(e.Response.Headers["Date"]).AddSeconds(int.Parse(e.Response.Headers["Retry-After"]));
+                    TimeSpan ST = (TimeSpan)(DT - DateTime.Now);
+                    Console.WriteLine("Time Till Expried " + Math.Floor(ST.TotalHours) + ":" + ST.Minutes + ":" + ST.Seconds);
+                }
                 return null;
             }
         }
