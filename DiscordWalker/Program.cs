@@ -13,7 +13,8 @@ namespace DiscordWalker
         static void Main(string[] args)
         {
             NetworkInterface.SignIn(AccountDetails.Email, AccountDetails.Password);
-            List<String> Codes = Backend.Walker.StartWalking("bjRA52C", 100,120);
+            //StartInviteCode "" will load last state
+            List<String> Codes = Backend.Walker.StartWalking("", 100,240);
             Console.ReadLine();
         }
     }

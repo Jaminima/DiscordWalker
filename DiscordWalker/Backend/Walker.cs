@@ -10,15 +10,22 @@ namespace DiscordWalker.Backend
 {
     public static class Walker
     {
-        public static List<String> StartWalking(string StartInviteCode, int MaxDiscordsWalked=10, int JoinDelay=5)
+        public static List<String> StartWalking(string StartInviteCode="", int MaxDiscordsWalked=10, int JoinDelay=5)
         {
             List<String> WalkedGuilds = new List<string> { },
                 WalkedCodes = new List<string> { },
-                UnWalkedCodes = WalkDiscord(StartInviteCode, JoinDelay, ref WalkedGuilds);
+                UnWalkedCodes;
+            if (StartInviteCode=="")
+            {
+                WalkerState State = LoadWalkerState();
+                if (State == null) { return null; }
+                WalkedGuilds = State.WalkedGuilds; WalkedCodes = State.WalkedCodes; UnWalkedCodes = State.UnWalkedCodes;
+            }
+            else { UnWalkedCodes = WalkDiscord(StartInviteCode, ref WalkedGuilds); Console.WriteLine("\nWaiting " + JoinDelay + " Seconds before Continuing\n"); Thread.Sleep(JoinDelay * 1000);  }
             if (UnWalkedCodes == null) { return null; }
             for (int i = 0; i < MaxDiscordsWalked && i < UnWalkedCodes.Count; i++)
             {
-                List<String> NewCodes = WalkDiscord(UnWalkedCodes.First(), JoinDelay, ref WalkedGuilds);
+                List<String> NewCodes = WalkDiscord(UnWalkedCodes.First(),  ref WalkedGuilds);
                 if (NewCodes != null)
                 {
                     WalkedCodes.Add(UnWalkedCodes.First());
@@ -26,11 +33,15 @@ namespace DiscordWalker.Backend
                 }
                 UnWalkedCodes.RemoveAt(0);
                 SaveWalkerState(WalkedGuilds,WalkedCodes,UnWalkedCodes);
+
+                int Delay = (JoinDelay + Master.Rnd.Next(-10, 10));
+                Console.WriteLine("\nWaiting " + Delay + " Seconds before Continuing\n");
+                Thread.Sleep(Delay * 1000);
             }
             return WalkedCodes.Union(UnWalkedCodes).ToList();
         }
 
-        static List<String> WalkDiscord(string InviteCode, int JoinDelay, ref List<String> WalkedGuilds)
+        static List<String> WalkDiscord(string InviteCode, ref List<String> WalkedGuilds)
         {
             string GuildID = Actions.JoinServer(InviteCode);
             if (GuildID == null) { return null; }
@@ -50,12 +61,9 @@ namespace DiscordWalker.Backend
                     string Code = ExtractInviteCode(Message["content"].ToString());
                     if (Actions.ServerExists(Code)) { ValidCodes.Add(Code); Console.Write(Code + ","); System.IO.File.AppendAllText("./Data/Codes.txt", Code + "\n"); }
                 }
-                foreach (JToken Message in ChannelMessages) { Master.StoreMessage(Message["content"].ToString() + "\n"); }
+                foreach (JToken Message in ChannelMessages) { Master.StoreMessage(Message["content"].ToString()); }
             }
             if (ValidCodes.Count == 0) { Console.WriteLine("No Valid Codes"); }
-            int Delay = (JoinDelay + Master.Rnd.Next(-10, 10));
-            Console.WriteLine("\nWaiting "+Delay+" Seconds before Continuing\n");
-            Thread.Sleep(Delay * 1000);
             return ValidCodes;
         }
 
@@ -75,6 +83,16 @@ namespace DiscordWalker.Backend
             WalkerState State = new WalkerState();
             State.WalkedGuilds = WalkedGuilds; State.WalkedCodes = WalkedCodes; State.UnWalkedCodes = UnWalkedCodes;
             System.IO.File.WriteAllText("./Data/WalkerState.txt", JToken.FromObject(State).ToString());
+        }
+
+        static WalkerState LoadWalkerState()
+        {
+            try
+            {
+                JToken WalkerJSON = JToken.Parse(System.IO.File.ReadAllText("./Data/WalkerState.txt"));
+                return WalkerJSON.ToObject<WalkerState>();
+            }
+            catch { return null; }
         }
     }
 
