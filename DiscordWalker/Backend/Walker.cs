@@ -42,6 +42,7 @@ namespace DiscordWalker.Backend
                 if (NewCodes != null)
                 {
                     WalkedCodes.Add(UnWalkedCodes.First());
+                    NewCodes.ForEach(delegate (String S) { if (!WalkedCodes.Contains(S) && !UnWalkedCodes.Contains(S)) { UnWalkedCodes.Add(S); } });
                 }
                 UnWalkedCodes.RemoveAt(0);
                 SaveWalkerState(SeenGuilds, WalkedCodes,UnWalkedCodes);
@@ -60,8 +61,7 @@ namespace DiscordWalker.Backend
         static List<String> WalkDiscord(string InviteCode, ref List<String> SeenGuilds)
         {
             string GuildID = Actions.JoinServer(InviteCode);
-            if (GuildID == null) { return null; }
-            if (SeenGuilds.Contains(GuildID)) { return null; }
+            if (GuildID == null) { Console.WriteLine("Failed to join Guild"); return null;  }
             SeenGuilds.Add(GuildID);
 
             Console.WriteLine("Joined Guild: " + GuildID + " And Found These Valid Codes: ");
