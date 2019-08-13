@@ -14,7 +14,8 @@ namespace DiscordWalker
         {
             NetworkInterface.SignIn(AccountDetails.Email, AccountDetails.Password);
             //StartInviteCode "" will load last state
-            List<String> Codes = Backend.Walker.StartWalking("", 100,240);
+            List<String> Codes = Backend.Walker.StartWalking("6qX34HR", 10, 240);
+            Console.WriteLine("Finished Walking");
             Console.ReadLine();
         }
     }

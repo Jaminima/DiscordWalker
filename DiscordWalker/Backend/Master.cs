@@ -30,5 +30,12 @@ namespace DiscordWalker.Backend
             if (Messages.Count == 0) { return "Yee Haw Boys"; }
             return Messages[Rnd.Next(0, Messages.Count)];
         }
+
+        public static void SaveCodes(List<String> Codes)
+        {
+            System.IO.File.WriteAllLines("./Data/Codes.txt", Codes);
+            for (int i=0;i<Codes.Count;i++) { Codes[i] = "https://discord.gg/" + Codes[i]; if (i % 11 == 0) { Codes.Insert(i, "-------------"); i++; } }
+            System.IO.File.WriteAllLines("./Data/Links.txt", Codes);
+        }
     }
 }
