@@ -79,7 +79,9 @@ namespace DiscordWalker.Backend
                     if (ServerID!=null && !SeenGuilds.Contains(ServerID)) { SeenGuilds.Add(ServerID); ValidCodes.Add(Code); Console.Write(Code + ","); }
                 }
                 foreach (JToken Message in ChannelMessages) { Master.StoreMessage(Message["content"].ToString()); }
+                Thread.Sleep(500);
             }
+            Actions.LeaveServer(GuildID);
             if (ValidCodes.Count == 0) { Console.WriteLine("No Valid Codes"); }
             return ValidCodes;
         }

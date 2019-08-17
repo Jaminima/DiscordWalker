@@ -16,6 +16,11 @@ namespace DiscordWalker.Backend.Discord
             return null;
         }
 
+        public static void LeaveServer(string GuildID)
+        {
+            NetworkInterface.Request("users/@me/guilds/" + GuildID, WToken: true,Method:"DELETE");
+        }
+
         public static bool ServerExists(string InviteCode)
         {
             JToken Res = NetworkInterface.Request("invite/" + InviteCode + "?with_counts=true", Method: "GET");
