@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DiscordUserAPI">
+      <HintPath>..\..\DiscordUserAPI\DiscordUserAPI\bin\Debug\DiscordUserAPI.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -47,9 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountDetails.cs" />
-    <Compile Include="Backend\Discord\Actions.cs" />
-    <Compile Include="Backend\Discord\Fetch.cs" />
-    <Compile Include="Backend\Discord\NetworkInterface.cs" />
     <Compile Include="Backend\Master.cs" />
     <Compile Include="Backend\Walker.cs" />
     <Compile Include="Program.cs" />

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using DiscordWalker.Backend.Discord;
+using DiscordUserAPI;
 using Newtonsoft.Json.Linq;
 
 namespace DiscordWalker.Backend
 {
     public static class Walker
     {
-        public static List<String> StartWalking(string StartInviteCode="", int MaxDiscordsWalked=10, int JoinDelay=5)
+        public static List<String> StartWalking(Instance Instance,string StartInviteCode="", int MaxDiscordsWalked=10, int JoinDelay=5)
         {
             List<String> SeenGuilds = new List<string> { },
                 WalkedCodes = new List<string> { },
@@ -22,7 +22,7 @@ namespace DiscordWalker.Backend
                 SeenGuilds = State.SeenGuilds; WalkedCodes = State.WalkedCodes; UnWalkedCodes = State.UnWalkedCodes;
             }
             else {
-                UnWalkedCodes = WalkDiscord(StartInviteCode, ref SeenGuilds);
+                UnWalkedCodes = WalkDiscord(StartInviteCode, ref SeenGuilds, Instance);
                 MaxDiscordsWalked--;
 
                 SaveWalkerState(SeenGuilds, WalkedCodes, UnWalkedCodes);
@@ -38,7 +38,7 @@ namespace DiscordWalker.Backend
 
             for (int i = 0; i < MaxDiscordsWalked && i < UnWalkedCodes.Count; i++)
             {
-                List<String> NewCodes = WalkDiscord(UnWalkedCodes.First(),  ref SeenGuilds);
+                List<String> NewCodes = WalkDiscord(UnWalkedCodes.First(),  ref SeenGuilds, Instance);
                 if (NewCodes != null)
                 {
                     WalkedCodes.Add(UnWalkedCodes.First());
@@ -58,30 +58,30 @@ namespace DiscordWalker.Backend
             return WalkedCodes.Union(UnWalkedCodes).ToList();
         }
 
-        static List<String> WalkDiscord(string InviteCode, ref List<String> SeenGuilds)
+        static List<String> WalkDiscord(string InviteCode, ref List<String> SeenGuilds, Instance Instance)
         {
-            string GuildID = Actions.JoinServer(InviteCode);
+            string GuildID = Instance.Actions.JoinServer(InviteCode);
             if (GuildID == null) { Console.WriteLine("Failed to join Guild"); return null;  }
             SeenGuilds.Add(GuildID);
 
             Console.WriteLine("Joined Guild: " + GuildID + " And Found These Valid Codes: ");
 
             List<String> ValidCodes = new List<string> { },
-                ChannelIDs = Fetch.TextChannels(GuildID);
-            Actions.SendMessage(ChannelIDs.First(), Master.RandomMessage());
+                ChannelIDs = Instance.Fetch.TextChannels(GuildID);
+            Instance.Actions.SendMessage(ChannelIDs.First(), Master.RandomMessage());
             foreach (string ChannelID in ChannelIDs)
             {
-                List<JToken> ChannelMessages = Fetch.Messages(ChannelID, 100);
+                List<JToken> ChannelMessages = Instance.Fetch.Messages(ChannelID, 100);
                 foreach (JToken Message in ChannelMessages.Where(x => x["content"].ToString().Contains("https://discord.gg/")))
                 {
                     string Code = ExtractInviteCode(Message["content"].ToString()),
-                        ServerID = Fetch.ServerID(Code);
+                        ServerID = Instance.Fetch.ServerID(Code);
                     if (ServerID!=null && !SeenGuilds.Contains(ServerID)) { SeenGuilds.Add(ServerID); ValidCodes.Add(Code); Console.Write(Code + ","); }
                 }
                 foreach (JToken Message in ChannelMessages) { Master.StoreMessage(Message["content"].ToString()); }
                 Thread.Sleep(500);
             }
-            Actions.LeaveServer(GuildID);
+            Instance.Actions.LeaveServer(GuildID);
             if (ValidCodes.Count == 0) { Console.WriteLine("No Valid Codes"); }
             return ValidCodes;
         }
