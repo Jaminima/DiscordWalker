@@ -60,7 +60,7 @@ namespace DiscordWalker.Backend
 
         static List<String> WalkDiscord(string InviteCode, ref List<String> SeenGuilds, Instance Instance)
         {
-            string GuildID = Instance.Actions.JoinServer(InviteCode);
+            string GuildID = Instance.Actions.JoinGuild(InviteCode);
             if (GuildID == null) { Console.WriteLine("Failed to join Guild"); return null;  }
             SeenGuilds.Add(GuildID);
 
@@ -81,7 +81,7 @@ namespace DiscordWalker.Backend
                 foreach (JToken Message in ChannelMessages) { Master.StoreMessage(Message["content"].ToString()); }
                 Thread.Sleep(500);
             }
-            Instance.Actions.LeaveServer(GuildID);
+            Instance.Actions.LeaveGuild(GuildID);
             if (ValidCodes.Count == 0) { Console.WriteLine("No Valid Codes"); }
             return ValidCodes;
         }
