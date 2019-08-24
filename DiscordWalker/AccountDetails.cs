@@ -8,6 +8,6 @@ namespace DiscordWalker
 {
     public class AccountDetails
     {
-        public static string Email = "", Password = "";
+        public static string Email = "qualih@vimail24.com", Password = "5J0Kb5%xaj%Q";
     }
 }

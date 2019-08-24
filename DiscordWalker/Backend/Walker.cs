@@ -10,8 +10,10 @@ namespace DiscordWalker.Backend
 {
     public static class Walker
     {
-        public static List<String> StartWalking(Instance Instance,string StartInviteCode="", int MaxDiscordsWalked=10, int JoinDelay=5)
+        public static List<String> StartWalking(List<Instance> Instances,string StartInviteCode="", int MaxDiscordsWalked=10, int JoinDelay=5)
         {
+            Instance Instance=null;
+            NextInstance(ref Instance, ref Instances);
             List<String> SeenGuilds = new List<string> { },
                 WalkedCodes = new List<string> { },
                 UnWalkedCodes;
@@ -23,6 +25,7 @@ namespace DiscordWalker.Backend
             }
             else {
                 UnWalkedCodes = WalkDiscord(StartInviteCode, ref SeenGuilds, Instance);
+                NextInstance(ref Instance, ref Instances);
                 MaxDiscordsWalked--;
 
                 SaveWalkerState(SeenGuilds, WalkedCodes, UnWalkedCodes);
@@ -39,6 +42,7 @@ namespace DiscordWalker.Backend
             for (int i = 0; i < MaxDiscordsWalked && i < UnWalkedCodes.Count; i++)
             {
                 List<String> NewCodes = WalkDiscord(UnWalkedCodes.First(),  ref SeenGuilds, Instance);
+                NextInstance(ref Instance, ref Instances);
                 if (NewCodes != null)
                 {
                     WalkedCodes.Add(UnWalkedCodes.First());
@@ -84,6 +88,12 @@ namespace DiscordWalker.Backend
             Instance.Actions.LeaveGuild(GuildID);
             if (ValidCodes.Count == 0) { Console.WriteLine("No Valid Codes"); }
             return ValidCodes;
+        }
+
+        static void NextInstance(ref Instance Instance, ref List<Instance> Instances)
+        {
+            if (Instance != null) { Instances.Add(Instance); }
+            Instance = Instances.First(); Instances.RemoveAt(0);
         }
 
         static string ExtractInviteCode(string Message)
