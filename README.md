@@ -1,3 +1,4 @@
+
 # Discord Walker
 Inspired by [Discord Invite Finder](https://github.com/Jaminima/DiscordInviteFinder) which used a Brute-Force method of finding invites,</br>
 But with some major improvements in terms of speed and efficiency
@@ -16,7 +17,7 @@ Due to the nature of what the User account is doing, it is quickly flagged</br>
 And banned by discord, hence a delay is used to try and extend the life of the account.</br>
 There is currently no known way to avoid this, bar excessively large delays.
 ## Getting Started
-To get started, add your details into AccountDetails.cs</br>
-Modify this line `List<String> Codes  =  Backend.Walker.StartWalking(Instance,"", 10, 180);`</br>
+To get started, add your details into Accounts.txt in /Debug/Data, an example is available [here](https://github.com/Jaminima/DiscordWalker/ExampleData/Accounts.txt)</br>
+Modify this line `List<String> Codes  =  Backend.Walker.StartWalking(GetInstances(),"", 10, 180);`</br>
 In Program.cs, change the `""` to include the starting invite code, eg: `"RK7HVE"` NOT `"https://discord.gg/RK7HVE"`</br>
 The following 2 paramaters define, firstly how many discords to Walk through and secondly how many seconds between joining each discord.
